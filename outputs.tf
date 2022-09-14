@@ -4,9 +4,6 @@ output "vpc_id" {
 }
 
 output "subnets" {
-  description = "An object representing the subnets. The key is the CIDR blocks of each subnet, the values are `id` and `availability_zone`"
-  value = { for i, o in aws_subnet.main : i => {
-    id                = o.id
-    availability_zone = o.availability_zone
-  } }
+  description = "A map representing the subnets. The key is the CIDR blocks and the value is the `id`"
+  value       = { for k, s in aws_subnet.main : k => s.id }
 }
