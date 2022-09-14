@@ -11,9 +11,9 @@ data "aws_availability_zones" "available" {
 }
 
 resource "aws_subnet" "main" {
-  count             = var.subnet_count
-  availability_zone = element(data.aws_availability_zones.available.names, count.index)
-  cidr_block        = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index)
+  for_each          = toset(var.subnets_cidr)
+  availability_zone = element(data.aws_availability_zones.available.names, index(var.subnets_cidr, each.key))
+  cidr_block        = cidrsubnet(aws_vpc.main.cidr_block, 8, index(var.subnets_cidr, each.key))
   vpc_id            = aws_vpc.main.id
 }
 
@@ -26,7 +26,7 @@ resource "aws_route_table" "main" {
 }
 
 resource "aws_route_table_association" "subnet" {
-  count          = var.subnet_count
-  subnet_id      = aws_subnet.main[count.index].id
+  for_each       = aws_subnet.main
+  subnet_id      = each.value.id
   route_table_id = aws_route_table.main.id
 }

@@ -4,13 +4,9 @@ variable "vpc_cidr" {
   nullable    = false
 }
 
-variable "subnet_count" {
-  type        = number
-  description = "(Optional) Number of subnets to create within the VPC. The value must be an integer between 0 and 256. Defaults `2`"
-  default     = 2
+variable "subnets_cidr" {
+  type        = list(string)
+  description = "(Optional) List of CIDR blocks to be assigned to subnets within the VPC."
+  default     = []
   nullable    = false
-  validation {
-    condition     = var.subnet_count >= 0 && var.subnet_count <= 256
-    error_message = "The subnet_count value must be an integer between 0 and 256"
-  }
 }

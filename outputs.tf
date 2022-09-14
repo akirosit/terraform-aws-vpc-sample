@@ -3,7 +3,7 @@ output "vpc_id" {
   value       = aws_vpc.main.id
 }
 
-output "subnets_id" {
-  description = "A list containing every subnet's ID"
-  value       = aws_subnet.main.*.id
+output "subnets" {
+  description = "A map representing the subnets. The key is the CIDR blocks and the value is the `id`"
+  value       = { for k, s in aws_subnet.main : k => s.id }
 }
