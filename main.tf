@@ -13,7 +13,7 @@ data "aws_availability_zones" "available" {
 resource "aws_subnet" "main" {
   for_each          = toset(var.subnets_cidr)
   availability_zone = element(data.aws_availability_zones.available.names, index(var.subnets_cidr, each.key))
-  cidr_block        = cidrsubnet(aws_vpc.main.cidr_block, 8, index(var.subnets_cidr, each.key))
+  cidr_block        = each.key
   vpc_id            = aws_vpc.main.id
 }
 
